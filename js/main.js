@@ -3,6 +3,7 @@
 const width = 800;
 const height = 500;
 let mousePos = {x:0, y:0};
+let velocity = 5;
 
 const canvas = document.getElementById('canvas');
 canvas.width = width;
@@ -20,6 +21,9 @@ class Walker {
         this.pos.x = width / 2;
         this.pos.y = height / 2;
         this.display();
+        window.setInterval(() => {
+            this.randomMove();
+        }, 1)
     }
 
     display() {
@@ -90,11 +94,14 @@ function moveToTarget(el) {
 }
 
 
-let walker = new Walker();
+new Walker();
+// new Walker();
+// new Walker();
+// new Walker();
+// new Walker();
+// new Walker();
+// new Walker();
 
-window.setInterval(() => {
-    walker.randomMoveToMouse();
-}, 1)
 
 document.addEventListener('mousemove', evt =>{
     mousePos = getMousePos(canvas, evt);
