@@ -15,6 +15,16 @@ ctx.fillRect(0, 0, width, height);
 
 execExempleBtns();
 
+function randn_bm() {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0) return randn_bm() // resample between 0 and 1
+    return num
+}
+
 class Walker {
     pos = {x: 0, y: 0};
     interval;
@@ -36,6 +46,7 @@ class Walker {
         ctx.fillRect(0, 0, width, height);
         this.pos.x = width / 2;
         this.pos.y = height / 2;
+        ctx.closePath();
         ctx.beginPath();
         this.interval = setInterval(() => {
             this[funcName]();
@@ -47,6 +58,17 @@ class Walker {
         ctx.beginPath();
         ctx.moveTo(this.pos.x, this.pos.y);
         ctx.stroke();
+    }
+
+    gaussianDistribution() {
+        const num = randn_bm();
+        const sd = 1000;
+        const mean = 0;
+        const x = sd * num + mean;
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.01)';
+        ctx.beginPath();
+        ctx.ellipse(x,180,16,16,40,0,2 * Math.PI,false);
+        ctx.fill();
     }
 
     randomMove() {
@@ -137,7 +159,7 @@ function moveToTarget(el) {
     ctx.stroke();
 }
 
-let walker = new Walker('randomMoveLeftRight');
+let walker = new Walker('gaussianDistribution');
 
 document.addEventListener('mousemove', evt => {
     mousePos = getMousePos(canvas, evt);
@@ -167,7 +189,7 @@ $('.exec-btn').on('click', function (e) {
 
 function execExempleBtns() {
     const exemples = {
-        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse']
+        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse', 'gaussianDistribution']
     }
     const keys = Object.keys(exemples);
     let dropdowns = '';
