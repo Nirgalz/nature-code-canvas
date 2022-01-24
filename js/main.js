@@ -2,7 +2,7 @@
 
 const width = 800;
 const height = 500;
-let mousePos = {x:0, y:0};
+let mousePos = {x: 0, y: 0};
 let velocity = 5;
 
 const canvas = document.getElementById('canvas');
@@ -13,16 +13,32 @@ const ctx = canvas.getContext('2d');
 ctx.fillStyle = '#e5cc81';
 ctx.fillRect(0, 0, width, height);
 
+execExempleBtns();
 
 class Walker {
-    pos = {x: 0, y: 0}
+    pos = {x: 0, y: 0};
+    interval;
 
-    constructor() {
+    constructor(funcName) {
         this.pos.x = width / 2;
         this.pos.y = height / 2;
         this.display();
-        window.setInterval(() => {
-            this.randomMove();
+        this.interval = setInterval(() => {
+            this[funcName]();
+        }, 1)
+    }
+
+    execExemple(funcName) {
+        clearInterval(this.interval);
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#e5cc81';
+        ctx.fillRect(0, 0, width, height);
+        this.pos.x = width / 2;
+        this.pos.y = height / 2;
+        ctx.beginPath();
+        this.interval = setInterval(() => {
+            this[funcName]();
         }, 1)
     }
 
@@ -34,12 +50,20 @@ class Walker {
     }
 
     randomMove() {
-        const random = randomIntFromInterval(0,3);
+        const random = randomIntFromInterval(0, 3);
         let moveTo = [
-            () => { this.pos.x += 1; },
-            () => { this.pos.x -= 1; },
-            () => { this.pos.y += 1; },
-            () => { this.pos.y -= 1; }
+            () => {
+                this.pos.x += 1;
+            },
+            () => {
+                this.pos.x -= 1;
+            },
+            () => {
+                this.pos.y += 1;
+            },
+            () => {
+                this.pos.y -= 1;
+            }
         ];
 
         moveTo[random]();
@@ -47,27 +71,47 @@ class Walker {
     }
 
     randomMoveLeftRight() {
-        const random = randomIntFromInterval(0,4);
+        const random = randomIntFromInterval(0, 4);
         let moveTo = [
-            () => { this.pos.x += 1; },
-            () => { this.pos.x -= 1; },
-            () => { this.pos.y += 1; },
-            () => { this.pos.y -= 1; },
-            () => { this.pos.x += 1; this.pos.y += 1;}
+            () => {
+                this.pos.x += 1;
+            },
+            () => {
+                this.pos.x -= 1;
+            },
+            () => {
+                this.pos.y += 1;
+            },
+            () => {
+                this.pos.y -= 1;
+            },
+            () => {
+                this.pos.x += 1;
+                this.pos.y += 1;
+            }
         ];
 
         moveTo[random]();
         moveToTarget(this)
     }
+
     randomMoveToMouse() {
-        const random = randomIntFromInterval(0,7);
+        const random = randomIntFromInterval(0, 7);
         let moveTo = [
-            () => { this.pos.x += 1; },
-            () => { this.pos.x -= 1; },
-            () => { this.pos.y += 1; },
-            () => { this.pos.y -= 1; },
+            () => {
+                this.pos.x += 1;
+            },
+            () => {
+                this.pos.x -= 1;
+            },
+            () => {
+                this.pos.y += 1;
+            },
+            () => {
+                this.pos.y -= 1;
+            },
         ];
-        if (random >3) {
+        if (random > 3) {
             this.pos.x += mousePos.x > this.pos.x ? 1 : -1;
             this.pos.y += mousePos.y > this.pos.y ? 1 : -1;
         } else {
@@ -93,20 +137,11 @@ function moveToTarget(el) {
     ctx.stroke();
 }
 
+let walker = new Walker('randomMoveLeftRight');
 
-new Walker();
-// new Walker();
-// new Walker();
-// new Walker();
-// new Walker();
-// new Walker();
-// new Walker();
-
-
-document.addEventListener('mousemove', evt =>{
+document.addEventListener('mousemove', evt => {
     mousePos = getMousePos(canvas, evt);
 })
-
 
 
 function randomIntFromInterval(min, max) {
@@ -119,4 +154,42 @@ function getMousePos(canvas, evt) {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
     };
+}
+
+
+$('.exec-btn').on('click', function (e) {
+    e.preventDefault();
+    walker.execExemple($(this).data('exec'));
+    console.log($(this).data('exec'))
+})
+
+
+
+function execExempleBtns() {
+    const exemples = {
+        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse']
+    }
+    const keys = Object.keys(exemples);
+    let dropdowns = '';
+    keys.forEach((key, index) => {
+        dropdowns += ` <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#${key}-dropdown" aria-controls="#${key}-dropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="#${key}-dropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="${key}-DropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ${key}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="${key}-DropdownMenuLink">`;
+        exemples[key].forEach((key, index) => {
+            dropdowns += `<li><a class="dropdown-item exec-btn" data-exec="${key}" href="">${key}</a></li>`;
+        })
+        dropdowns += `</ul>
+                </li>
+            </ul>
+        </div>`;
+        $('#nav-links').append(dropdowns);
+    });
 }
