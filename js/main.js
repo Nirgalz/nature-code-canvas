@@ -78,62 +78,15 @@ class Walker {
     }
 
     gaussianRandomWalk() {
-        const random = randomIntFromInterval(0, 7);
         const gaussianNumber = randomGaussian() * 10;
-        let moveTo = [
-            () => {
-                this.pos.x += gaussianNumber;
-            },
-            () => {
-                this.pos.x -= gaussianNumber;
-            },
-
-            () => {
-                this.pos.y += gaussianNumber;
-            },
-            () => {
-                this.pos.y -= gaussianNumber;
-            },
-            () => {
-                this.pos.x += gaussianNumber;
-                this.pos.y += gaussianNumber;
-            },
-            () => {
-                this.pos.x -= gaussianNumber;
-                this.pos.y -= gaussianNumber;
-            },
-            () => {
-                this.pos.x += gaussianNumber;
-                this.pos.y -= gaussianNumber;
-            },
-            () => {
-                this.pos.x -= gaussianNumber;
-                this.pos.y += gaussianNumber;
-            },
-        ];
-
-        moveTo[random]();
+        this.pos.x = this.pos.x + randomPlusMinus() * gaussianNumber;
+        this.pos.y = this.pos.y + randomPlusMinus() * gaussianNumber;
         moveToTarget(this)
     }
 
     randomMove() {
-        const random = randomIntFromInterval(0, 3);
-        let moveTo = [
-            () => {
-                this.pos.x += 1;
-            },
-            () => {
-                this.pos.x -= 1;
-            },
-            () => {
-                this.pos.y += 1;
-            },
-            () => {
-                this.pos.y -= 1;
-            }
-        ];
-
-        moveTo[random]();
+        this.pos.x = this.pos.x + randomPlusMinus();
+        this.pos.y = this.pos.y + randomPlusMinus();
         moveToTarget(this)
     }
 
@@ -231,7 +184,6 @@ function getMousePos(canvas, evt) {
 $('.exec-btn').on('click', function (e) {
     e.preventDefault();
     walker.execExemple($(this).data('exec'));
-    console.log($(this).data('exec'))
 })
 
 
