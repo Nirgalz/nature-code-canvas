@@ -62,12 +62,12 @@ class Walker {
 
     gaussianDistribution() {
         const num = randomGaussian();
-        const sd = 1000;
-        const mean = 0;
+        const sd = 500;
+        const mean = 100;
         const x = sd * num + mean;
         ctx.fillStyle = 'rgba(0, 0, 0, 0.01)';
         ctx.beginPath();
-        ctx.ellipse(x,180,16,16,40,0,2 * Math.PI,false);
+        ctx.ellipse(x,200,16,16,40,0,2 * Math.PI,false);
         ctx.fill();
     }
 
