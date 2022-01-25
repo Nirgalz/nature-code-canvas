@@ -78,7 +78,7 @@ class Walker {
         const x = sd * num + mean;
         ctx.fillStyle = 'rgba('+ randomGaussian()  * 250 + ' , '+ randomGaussian()  * 250 + ', '+ randomGaussian()  * 250 + ', 0.1)';
         ctx.beginPath();
-        ctx.ellipse(randomGaussian()  * 500 ,randomGaussian() * 500 ,16,16,40,0,2 * Math.PI,false);
+        ctx.ellipse(randomGaussian()  * 500  +150,randomGaussian() * 500 ,16,16,40,0,2 * Math.PI,false);
         ctx.fill();
     }
 
