@@ -3,7 +3,6 @@
 const width = 800;
 const height = 500;
 let mousePos = {x: 0, y: 0};
-let velocity = 5;
 
 const canvas = document.getElementById('canvas');
 canvas.width = width;
@@ -72,10 +71,49 @@ class Walker {
     }
 
     gaussianPainter() {
-        ctx.fillStyle = 'rgba('+ randomGaussian()  * 250 + ' , '+ randomGaussian()  * 250 + ', '+ randomGaussian()  * 250 + ', 0.1)';
+        ctx.fillStyle = 'rgba('+ randomGaussian()  * 250 + ' , '+ randomGaussian()  * 250 + ', '+ randomGaussian()  * 250 + ', 0.05)';
         ctx.beginPath();
         ctx.ellipse(randomGaussian()  * 500  +150,randomGaussian() * 500 ,16,16,40,0,2 * Math.PI,false);
         ctx.fill();
+    }
+
+    gaussianRandomWalk() {
+        const random = randomIntFromInterval(0, 7);
+        const gaussianNumber = randomGaussian() * 10;
+        let moveTo = [
+            () => {
+                this.pos.x += gaussianNumber;
+            },
+            () => {
+                this.pos.x -= gaussianNumber;
+            },
+
+            () => {
+                this.pos.y += gaussianNumber;
+            },
+            () => {
+                this.pos.y -= gaussianNumber;
+            },
+            () => {
+                this.pos.x += gaussianNumber;
+                this.pos.y += gaussianNumber;
+            },
+            () => {
+                this.pos.x -= gaussianNumber;
+                this.pos.y -= gaussianNumber;
+            },
+            () => {
+                this.pos.x += gaussianNumber;
+                this.pos.y -= gaussianNumber;
+            },
+            () => {
+                this.pos.x -= gaussianNumber;
+                this.pos.y += gaussianNumber;
+            },
+        ];
+
+        moveTo[random]();
+        moveToTarget(this)
     }
 
     randomMove() {
@@ -156,21 +194,21 @@ function randomPlusMinus() {
 
 function moveToTarget(el) {
     if (el.pos.x > width) {
-        el.pos.x -= 1;
+        el.pos.x = width;
     } else if (el.pos.x < 0) {
-        el.pos.x += 1;
+        el.pos.x = 0;
     }
     if (el.pos.y > height) {
-        el.pos.y -= 2;
+        el.pos.y = height;
     } else if (el.pos.x < 0) {
-        el.pos.y += 2;
+        el.pos.y = 0;
     }
 
     ctx.lineTo(el.pos.x, el.pos.y)
     ctx.stroke();
 }
 
-let walker = new Walker('gaussianPainter');
+let walker = new Walker('gaussianRandomWalk');
 
 document.addEventListener('mousemove', evt => {
     mousePos = getMousePos(canvas, evt);
@@ -200,7 +238,7 @@ $('.exec-btn').on('click', function (e) {
 
 function execExempleBtns() {
     const exemples = {
-        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse', 'gaussianDistribution', 'gaussianPainter']
+        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse', 'gaussianDistribution', 'gaussianPainter', 'gaussianRandomWalk']
     }
     const keys = Object.keys(exemples);
     let dropdowns = '';
