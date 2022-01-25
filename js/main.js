@@ -79,32 +79,38 @@ class Walker {
 
     gaussianRandomWalk() {
         const gaussianNumber = randomGaussian() * 10;
-        this.pos.x = this.pos.x + randomPlusMinus() * gaussianNumber;
-        this.pos.y = this.pos.y + randomPlusMinus() * gaussianNumber;
+        const random = randomIntFromInterval(0, 2);
+        const moveTo = [
+            () => {this.pos.x = this.pos.x + randomPlusMinus() * gaussianNumber;},
+            () => {this.pos.y = this.pos.y + randomPlusMinus() * gaussianNumber;},
+            () => {
+                this.pos.x = this.pos.x + randomPlusMinus() * gaussianNumber;
+                this.pos.y = this.pos.y + randomPlusMinus() * gaussianNumber;
+            }
+        ]
+        moveTo[random]();
         moveToTarget(this)
     }
 
     randomMove() {
-        this.pos.x = this.pos.x + randomPlusMinus();
-        this.pos.y = this.pos.y + randomPlusMinus();
+        const random = randomIntFromInterval(0, 2);
+        const moveTo = [
+            () => {this.pos.x = this.pos.x + randomPlusMinus();},
+            () => {this.pos.y = this.pos.y + randomPlusMinus();},
+            () => {
+                this.pos.x = this.pos.x + randomPlusMinus();
+                this.pos.y = this.pos.y + randomPlusMinus();
+            }
+        ]
+        moveTo[random]();
         moveToTarget(this)
     }
 
     randomMoveLeftRight() {
-        const random = randomIntFromInterval(0, 4);
+        const random = randomIntFromInterval(0, 2);
         let moveTo = [
-            () => {
-                this.pos.x += 1;
-            },
-            () => {
-                this.pos.x -= 1;
-            },
-            () => {
-                this.pos.y += 1;
-            },
-            () => {
-                this.pos.y -= 1;
-            },
+            () => {this.pos.x = this.pos.x + randomPlusMinus();},
+            () => {this.pos.x = this.pos.x + randomPlusMinus();},
             () => {
                 this.pos.x += 1;
                 this.pos.y += 1;
