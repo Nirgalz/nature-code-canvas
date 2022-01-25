@@ -15,13 +15,13 @@ ctx.fillRect(0, 0, width, height);
 
 execExempleBtns();
 
-function randn_bm() {
+function randomGaussian() {
     let u = 0, v = 0;
     while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
     while(v === 0) v = Math.random();
     let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
     num = num / 10.0 + 0.5; // Translate to 0 -> 1
-    if (num > 1 || num < 0) return randn_bm() // resample between 0 and 1
+    if (num > 1 || num < 0) return randomGaussian() // resample between 0 and 1
     return num
 }
 
@@ -61,13 +61,24 @@ class Walker {
     }
 
     gaussianDistribution() {
-        const num = randn_bm();
+        const num = randomGaussian();
         const sd = 1000;
         const mean = 0;
         const x = sd * num + mean;
         ctx.fillStyle = 'rgba(0, 0, 0, 0.01)';
         ctx.beginPath();
         ctx.ellipse(x,180,16,16,40,0,2 * Math.PI,false);
+        ctx.fill();
+    }
+
+    gaussianPainter() {
+        const num = randomGaussian();
+        const sd = 1000;
+        const mean = 0;
+        const x = sd * num + mean;
+        ctx.fillStyle = 'rgba('+ randomGaussian()  * 250 + ' , '+ randomGaussian()  * 250 + ', '+ randomGaussian()  * 250 + ', 0.1)';
+        ctx.beginPath();
+        ctx.ellipse(randomGaussian()  * 500 ,randomGaussian() * 500 ,16,16,40,0,2 * Math.PI,false);
         ctx.fill();
     }
 
@@ -143,6 +154,10 @@ class Walker {
     }
 }
 
+function randomPlusMinus() {
+    return Math.random() < 0.5 ? -1 : 1;
+}
+
 function moveToTarget(el) {
     if (el.pos.x > width) {
         el.pos.x -= 1;
@@ -159,7 +174,7 @@ function moveToTarget(el) {
     ctx.stroke();
 }
 
-let walker = new Walker('gaussianDistribution');
+let walker = new Walker('gaussianPainter');
 
 document.addEventListener('mousemove', evt => {
     mousePos = getMousePos(canvas, evt);
@@ -189,7 +204,7 @@ $('.exec-btn').on('click', function (e) {
 
 function execExempleBtns() {
     const exemples = {
-        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse', 'gaussianDistribution']
+        'introduction': ['randomMove', 'randomMoveLeftRight', 'randomMoveToMouse', 'gaussianDistribution', 'gaussianPainter']
     }
     const keys = Object.keys(exemples);
     let dropdowns = '';
