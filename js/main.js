@@ -110,7 +110,7 @@ class Walker {
         const random = randomIntFromInterval(0, 2);
         let moveTo = [
             () => {this.pos.x = this.pos.x + randomPlusMinus();},
-            () => {this.pos.x = this.pos.x + randomPlusMinus();},
+            () => {this.pos.y = this.pos.y + randomPlusMinus();},
             () => {
                 this.pos.x += 1;
                 this.pos.y += 1;
@@ -122,22 +122,12 @@ class Walker {
     }
 
     randomMoveToMouse() {
-        const random = randomIntFromInterval(0, 7);
+        const random = randomIntFromInterval(0, 2);
         let moveTo = [
-            () => {
-                this.pos.x += 1;
-            },
-            () => {
-                this.pos.x -= 1;
-            },
-            () => {
-                this.pos.y += 1;
-            },
-            () => {
-                this.pos.y -= 1;
-            },
+            () => {this.pos.x = this.pos.x + randomPlusMinus();},
+            () => {this.pos.y = this.pos.y + randomPlusMinus();},
         ];
-        if (random > 3) {
+        if (random > 1) {
             this.pos.x += mousePos.x > this.pos.x ? 1 : -1;
             this.pos.y += mousePos.y > this.pos.y ? 1 : -1;
         } else {
