@@ -72,10 +72,6 @@ class Walker {
     }
 
     gaussianPainter() {
-        const num = randomGaussian();
-        const sd = 1000;
-        const mean = 0;
-        const x = sd * num + mean;
         ctx.fillStyle = 'rgba('+ randomGaussian()  * 250 + ' , '+ randomGaussian()  * 250 + ', '+ randomGaussian()  * 250 + ', 0.1)';
         ctx.beginPath();
         ctx.ellipse(randomGaussian()  * 500  +150,randomGaussian() * 500 ,16,16,40,0,2 * Math.PI,false);
